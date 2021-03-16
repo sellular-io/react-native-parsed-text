@@ -110,20 +110,20 @@ class ParsedText extends React.Component {
     return textExtraction.parse().map((props, index) => {
       const { style: parentStyle } = this.props;
       const { style, onPress = null, onLongPress = null, ...remainder } = props;
+      const isNormalText = typeof onPress !== 'function';
+      const ParentComponent = isNormalText ? View : TouchableOpacity;
       return (
-        <TouchableOpacity
+        <ParentComponent
           key={`parsedText-${index}`}
-          disable={typeof onPress !== 'function'}
-          activeOpacity={typeof onPress !== 'function' ? 1 : 0.2}
-          onPress={onPress ?? (() => {})}
-          onLongPress={onLongPress ?? (() => {})}
+          onPress={onPress}
+          onLongPress={onLongPress}
         >
           <Text
             style={[parentStyle, style]}
             {...this.props.childrenProps}
             {...remainder}
           />
-        </TouchableOpacity>
+        </ParentComponent>
       );
     });
   }
